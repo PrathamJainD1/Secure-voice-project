@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - SafeReport</title>
+  <meta name="description" content="Learn about SafeReport's mission and values" />
+  <style>
+    :root {
+      --primary: rgba(147, 51, 234, 0.95);
+      --primary-hover: rgba(126, 34, 206, 0.95);
+      --text-light: #ffffff;
+      --muted-foreground: #6b7280;
+      --background: #f9fafb;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background);
+      color: #111827;
+    }
+
+    /* Navigation */
+    .nav {
+      background-color: var(--primary);
+      color: var(--text-light);
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-light);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--text-light);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--text-light);
+      color: var(--primary);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--primary);
+      color: var(--text-light);
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    /* Headings and Text Colors */
+    h1, h2, h3 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    p, li {
+      color: var(--muted-foreground);
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="landing.html" class="nav-brand">SafeReport</a>
+      <ul class="nav-links">
+        <li><a href="landing.html">Home</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="auth.html" class="btn-outline">Sign In</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center mb-8">About SafeReport</h1>
+
+    <div class="card mb-8">
+      <h2>Our Mission</h2>
+      <p>
+        SafeReport was created to provide a secure and confidential platform for individuals to report incidents without fear. We believe everyone deserves to have their voice heard in a safe environment.
+      </p>
+    </div>
+
+    <div class="grid mb-8">
+      <div class="card">
+        <h3>🔐 Security First</h3>
+        <p>
+          We use industry-leading encryption and security measures to protect your identity and data.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🤝 Confidential</h3>
+        <p>
+          Your reports are handled with the utmost confidentiality and reviewed by qualified professionals.
+        </p>
+      </div>
+      <div class="card">
+        <h3>💪 Empowering</h3>
+        <p>
+          We empower individuals to speak up and create positive change in their environments.
+        </p>
+      </div>
+      <div class="card">
+        <h3>📈 Transparent</h3>
+        <p>
+          Track the progress of your report and receive updates throughout the review process.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How It Works</h2>
+      <ol style="list-style: decimal; margin-left: 1.5rem;">
+        <li style="margin-bottom: 0.75rem;">
+          <strong>Submit Your Report:</strong> Fill out our secure form with details about the incident.
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+          <strong>Review Process:</strong> Your report is reviewed by qualified professionals who will assess the situation.
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+          <strong>Track Progress:</strong> Monitor the status of your report through your secure dashboard.
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+          <strong>Resolution:</strong> Appropriate action is taken based on the findings, and you’re kept informed throughout.
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 SafeReport. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

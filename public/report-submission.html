@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Report - SafeReport</title>
+  <meta name="description" content="Submit an anonymous report securely">
+  <link rel="stylesheet" href="report-submission.css">
+  
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="landing.html" class="nav-brand">SafeReport</a>
+      <ul class="nav-links">
+        <li><a href="landing.html">Home</a></li>
+        <li><a href="user.html">Dashboard</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" style="max-width: 800px; padding: 4rem 1.5rem;">
+    <div class="card">
+      <h1 class="mb-4" style="font-size: 2rem;">Submit a Report</h1>
+      <p class="mb-8" style="color: hsl(var(--muted-foreground));">Your report is confidential and will be handled with care. All fields marked with * are required.</p>
+
+      <form id="reportForm">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select id="category" class="form-select" required>
+            <option value="">Select a category</option>
+            <option value="harassment">Harassment</option>
+            <option value="cyberbullying">Cyberbullying</option>
+            <option value="child abuse">Child Abuse</option>
+            <option value="theft">Theft</option>
+            <option value="blackmail">Blackmail</option>
+            <option value="corruption">Corruption</option>
+            <option value="discrimination">Discrimination</option>
+            <option value="safety">Safety Concern</option>
+            <option value="policy_violation">Policy Violation</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="title">Title *</label>
+          <input type="text" id="title" class="form-input" placeholder="Brief description of the incident" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Description *</label>
+          <textarea id="description" class="form-textarea" placeholder="Please provide details about the incident..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="incident-date">Date of Incident *</label>
+          <input type="date" id="incident-date" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">Location *</label>
+          <input type="text" id="location" class="form-input" placeholder="Where did this occur?" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="files">Attach Evidence (Optional)</label>
+          <input type="file" id="files" class="form-input" multiple accept="image/*,video/*,.pdf,.doc,.docx">
+          <small style="color: hsl(var(--muted-foreground)); display: block; margin-top: 0.5rem;">
+            You can attach photos, videos, or documents as evidence (max 5 files, 10MB each)
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" id="anonymous" checked>
+            <span>Submit anonymously</span>
+          </label>
+          <small style="color: hsl(var(--muted-foreground)); display: block; margin-top: 0.5rem;">
+            If unchecked, you can provide contact information for follow-up
+          </small>
+        </div>
+
+        <!-- Contact Information Section (Hidden by default when anonymous) -->
+        <div id="contactInfo" style="display: none; border: 1px solid hsl(var(--border)); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; background: hsl(var(--muted) / 0.3);">
+          <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Contact Information (Optional)</h3>
+          <p style="color: hsl(var(--muted-foreground)); margin-bottom: 1rem; font-size: 0.9rem;">
+            Providing your contact information allows authorities to reach you for updates or additional questions.
+          </p>
+          
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name</label>
+            <input type="text" id="name" class="form-input" placeholder="Full name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input type="email" id="email" class="form-input" placeholder="your.email@example.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="form-input" placeholder="+254 712 345 678">
+          </div>
+        </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Submit Report</button>
+    </form>
+
+    <!-- Success Message Container -->
+    <div id="successMessage" class="success-message" style="display: none;">
+      <div class="success-content">
+        <h3>✅ Report Submitted Successfully!</h3>
+        <p>Your report has been received and is being processed.</p>
+        <div class="case-id-display">
+          <strong>Report ID:</strong> <span id="caseIdDisplay"></span>
+        </div>
+        <p class="success-note">Please save this Report ID for your records. You can use it to track your report status.</p>
+        <button onclick="window.location.href='user.html'" class="btn btn-primary" style="margin-top: 1rem;">Go to Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="report-submission.js"></script>
+
+</body>
+</html>

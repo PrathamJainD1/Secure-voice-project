@@ -1,0 +1,433 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Victim Dashboard — Secure Voice</title>
+  <meta name="description" content="Victim dashboard for reporting blackmail, harassment, and safety threats." />
+  <style>
+    :root {
+      --primary: rgba(147, 51, 234, 0.95);
+      --muted: #6b7280;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --radius: 12px;
+      --container: 1100px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 230px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      transition: background 0.3s;
+      font-weight: 500;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(255,255,255,0.15);
+    }
+    .logout-btn {
+      margin-top: auto;
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      margin-left: 230px;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .wrap { width: 100%; max-width: var(--container); }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { font-weight: 700; font-size: 1.1rem; }
+    .btn {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn.ghost {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+    }
+    h2 { color: var(--primary); font-size: 1.1rem; margin-top: 0; }
+
+    form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    form label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.35rem; display: block; }
+    input, select, textarea {
+      width: 100%; padding: 0.6rem; border: 1px solid #e6e9ef; border-radius: 8px;
+    }
+    textarea { resize: vertical; min-height: 100px; }
+    .field-full { grid-column: 1 / -1; }
+
+    .reports-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .report-card { padding: 0.8rem; border-radius: 8px; background: #fff; border: 1px solid #eee; }
+    .badge { padding: 0.3rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+    .badge.pending { background: rgba(59,130,246,0.12); color:#2563eb; }
+    .badge.forwarded { background: rgba(250,204,21,0.12); color:#b45309; }
+    .badge.resolved { background: rgba(34,197,94,0.12); color:#16a34a; }
+
+    .empty { text-align:center; padding:2rem; color:var(--muted); border:1px dashed #ddd; border-radius:8px; }
+
+    [data-section] { display: none; }
+    [data-section].active { display: block; }
+
+    @media (max-width: 960px) {
+      .grid { grid-template-columns: 1fr; }
+      .main-content { margin-left: 0; }
+      .sidebar { position: static; width: 100%; flex-direction: row; justify-content: space-around; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Secure Voice</h2>
+    <a href="#" class="nav-link active" data-target="reports">📄 My Reports</a>
+    <a href="#" class="nav-link" data-target="track">🔍 Track My Report</a>
+    <a href="#" class="nav-link" data-target="help">📞 Help</a>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="main-content">
+    <div class="wrap">
+      <header>
+        <div class="brand">Secure Voice — Victim Dashboard</div>
+        <div>
+          <button class="btn" onclick="document.getElementById('reportForm').scrollIntoView({behavior:'smooth'})">File Report</button>
+          <button class="btn ghost" onclick="loadReports()">Refresh</button>
+        </div>
+      </header>
+
+      <!-- My Reports Section -->
+      <main class="grid" data-section="reports" class="active">
+        <section class="card">
+          <h2>File a New Report</h2>
+          <form id="reportForm">
+            <div class="row">
+              <div>
+                <label for="category">Incident Type *</label>
+                <select id="category" required>
+                  <option value="">Select type</option>
+                  <option value="blackmail">Blackmail / Extortion</option>
+                  <option value="cyberbullying">Cyberbullying / Digital Harassment</option>
+                  <option value="harassment">Harassment</option>
+                  <option value="child abuse">Child Abuse</option>
+                  <option value="theft">Theft</option>
+                  <option value="corruption">Corruption</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="date">Date of Incident *</label>
+                <input id="date" type="date" required />
+              </div>
+              <div class="field-full">
+                <label for="title">Short Title *</label>
+                <input id="title" type="text" placeholder="E.g. 'Blackmail on Instagram'" required />
+              </div>
+              <div class="field-full">
+                <label for="description">Description *</label>
+                <textarea id="description" placeholder="Describe what happened..." required></textarea>
+              </div>
+              <div class="field-full">
+                <label for="location">Location *</label>
+                <input id="location" type="text" placeholder="Where did this occur?" value="Kenya" required />
+              </div>
+              <div>
+                <label for="evidence">Attach Evidence (optional)</label>
+                <input id="evidence" type="file" multiple accept="image/*,video/*,application/pdf" />
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <input id="anonymous" type="checkbox" checked />
+                <label for="anonymous" style="margin: 0;">Submit Anonymously</label>
+              </div>
+              <div class="field-full" style="margin-top:.5rem;">
+                <button class="btn" type="submit">Submit Report</button>
+                <div id="formMsg" style="margin-left:1rem;font-size:0.9rem;color:var(--muted);display:inline-block;"></div>
+              </div>
+            </div>
+          </form>
+
+          <hr style="margin:1.5rem 0;border:none;border-top:1px solid #eee" />
+          <h2>My Reports</h2>
+          <div id="reportsContainer" class="reports-list">
+            <div class="empty">No reports submitted yet.</div>
+          </div>
+        </section>
+
+        <aside class="card">
+          <h2>Support Contacts</h2>
+          <div>
+            <p><strong>DCI Cybercrime Unit</strong><br><span class="small">Mazingira House, Kiambu Rd — (020) 272xxx</span></p>
+            <p><strong>National Police Service (NPS)</strong><br><span class="small">Nearest Police Station — 999 / 112</span></p>
+            <p><strong>Communications Authority (CAK)</strong><br><span class="small">complaints@ca.go.ke</span></p>
+            <p><strong>Legal Aid / Counselling</strong><br><span class="small">legalhelp@example.org</span></p>
+          </div>
+        </aside>
+      </main>
+
+      <!-- Track My Report Section -->
+      <main class="grid" data-section="track">
+        <section class="card">
+          <h2>Track My Report</h2>
+          <p>Enter your report reference ID to check its current status:</p>
+          <input type="text" id="trackId" placeholder="Enter Case ID (e.g., CASE-123456)" />
+          <button class="btn" onclick="trackReport()">Track</button>
+          <div id="trackResult" style="margin-top:1rem;color:var(--muted);"></div>
+        </section>
+      </main>
+
+      <!-- Help Section -->
+      <main class="grid" data-section="help">
+        <section class="card">
+          <h2>Help & Support</h2>
+          <p>If you're facing threats, harassment, or cyberbullying:</p>
+          <ul>
+            <li>Contact the <strong>DCI Cybercrime Unit</strong> for digital evidence issues.</li>
+            <li>Reach out to your nearest <strong>Police Station</strong> if safety is at risk.</li>
+            <li>Email <strong>complaints@ca.go.ke</strong> for online harassment cases.</li>
+            <li>For legal or emotional support, contact <strong>legalhelp@example.org</strong>.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+  const reportForm = document.getElementById("reportForm");
+  const reportsContainer = document.getElementById("reportsContainer");
+  const formMsg = document.getElementById("formMsg");
+
+  // Load reports
+  async function loadReports() {
+    try {
+      // For now, just show empty since we don't have userId tracking
+      // In production, you'd pass userId from authentication
+      const res = await fetch("http://localhost:5000/api/reports");
+      
+      if (!res.ok) {
+        throw new Error('Failed to fetch');
+      }
+      
+      const data = await res.json();
+      const reports = data.reports || [];
+      
+      reportsContainer.innerHTML = "";
+      if (!reports.length) {
+        reportsContainer.innerHTML = `<div class="empty">No reports submitted yet.</div>`;
+        return;
+      }
+      
+      reports.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "report-card";
+        card.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <strong>${r.title || 'Untitled'}</strong>
+            <span class="badge ${(r.status || 'pending').toLowerCase().replace('_', '-')}">${r.status || 'Pending'}</span>
+          </div>
+          <div style="font-size:0.9rem;color:var(--muted);">
+            <div>Category: ${r.category}</div>
+            <div>Case ID: <strong>${r.caseId}</strong></div>
+            <div>Date: ${new Date(r.createdAt).toLocaleDateString()}</div>
+          </div>
+        `;
+        reportsContainer.prepend(card);
+      });
+    } catch (err) {
+      console.error(err);
+      reportsContainer.innerHTML = `<div class="empty">Failed to load reports.</div>`;
+    }
+  }
+
+  // Submit report
+  reportForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formMsg.textContent = "";
+
+    const category = document.getElementById("category").value;
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const incidentDate = document.getElementById("date").value;
+    const location = document.getElementById("location").value.trim();
+    const anonymous = document.getElementById("anonymous").checked;
+    const evidenceFiles = document.getElementById("evidence").files;
+
+    if (!category || !title || !description || !incidentDate || !location) {
+      formMsg.style.color = "red";
+      formMsg.textContent = "⚠️ Please fill all required fields.";
+      return;
+    }
+
+    // ✅ Use FormData instead of JSON
+    const formData = new FormData();
+    formData.append('category', category);
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('incidentDate', incidentDate);
+    formData.append('location', location);
+    formData.append('isAnonymous', anonymous);
+
+    // Add evidence files
+    for (let i = 0; i < evidenceFiles.length; i++) {
+      formData.append('evidenceFiles', evidenceFiles[i]);
+    }
+
+    try {
+      formMsg.style.color = "blue";
+      formMsg.textContent = "Submitting...";
+      
+      const res = await fetch("http://localhost:5000/api/reports", {
+        method: "POST",
+        body: formData // ✅ Send FormData, not JSON
+      });
+
+      const data = await res.json();
+      
+      if (res.ok) {
+        formMsg.style.color = "green";
+        formMsg.textContent = `✅ Report submitted! Case ID: ${data.caseId}`;
+        reportForm.reset();
+        setTimeout(() => {
+          loadReports();
+          formMsg.textContent = "";
+        }, 3000);
+      } else {
+        formMsg.style.color = "red";
+        formMsg.textContent = `❌ ${data.message || "Failed to submit report."}`;
+        console.error("Server error:", data);
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      formMsg.style.color = "red";
+      formMsg.textContent = "❌ Failed to submit report. Please try again later.";
+    }
+  });
+
+  // Track report
+  async function trackReport() {
+    const caseId = document.getElementById("trackId").value.trim();
+    const result = document.getElementById("trackResult");
+    
+    if (!caseId) {
+      result.textContent = "⚠️ Please enter a Case ID.";
+      return;
+    }
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/reports/${caseId}`);
+      const data = await res.json();
+      
+      if (res.ok && data.report) {
+        const r = data.report;
+        result.innerHTML = `
+          <div style="background:white;padding:1rem;border-radius:8px;border:1px solid #eee;">
+            <strong>${r.title}</strong><br>
+            <span style="font-size:0.9rem;color:var(--muted);">
+              Status: <strong>${r.status}</strong><br>
+              Category: ${r.category}<br>
+              Date: ${new Date(r.createdAt).toLocaleDateString()}
+            </span>
+          </div>
+        `;
+      } else {
+        result.textContent = `❌ Case ID ${caseId} not found.`;
+      }
+    } catch (err) {
+      console.error(err);
+      result.textContent = "❌ Unable to fetch report status.";
+    }
+  }
+
+  // Navigation logic
+  const links = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("[data-section]");
+  links.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      links.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+      const target = link.getAttribute("data-target");
+      sections.forEach(sec => {
+        sec.classList.toggle("active", sec.getAttribute("data-section") === target);
+      });
+    });
+  });
+
+  function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
+  }
+
+  // Initialize
+  document.querySelector('[data-section="reports"]').classList.add("active");
+  loadReports();
+</script>
+</body>
+</html>

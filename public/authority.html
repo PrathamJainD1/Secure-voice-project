@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authority Dashboard - Secure Voice</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+
+    .status-badge.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-badge.under_review {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-badge.resolved {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-badge.closed {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .section {
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #667eea;
+    }
+
+    .section h2 {
+      color: #1f2937;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      font-weight: 600;
+      color: #4b5563;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .field .value {
+      color: #1f2937;
+      padding: 0.5rem;
+      background: white;
+      border-radius: 4px;
+    }
+
+    .description-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .evidence-files {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .file-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .file-item a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .file-item a:hover {
+      text-decoration: underline;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: #6b7280;
+    }
+
+    .error {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .success {
+      background: #d1fae5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .notes-section {
+      margin-top: 2rem;
+    }
+
+    .notes-section textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🛡️ Authority Dashboard</h1>
+      <p>Secure Voice - Report Management System</p>
+    </div>
+
+    <div class="content">
+      <div id="loading" class="loading">
+        <p>Loading report details...</p>
+      </div>
+
+      <div id="error" style="display: none;"></div>
+      <div id="success" style="display: none;"></div>
+
+      <div id="reportContent" style="display: none;">
+        <!-- Report Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="color: #1f2937; margin-bottom: 0.5rem;">Case ID: <span id="caseId"></span></h2>
+            <p style="color: #6b7280;">Status: <span id="statusBadge"></span></p>
+          </div>
+        </div>
+
+        <!-- Report Details -->
+        <div class="section">
+          <h2>📋 Report Details</h2>
+          <div class="info-grid">
+            <div class="field">
+              <label>Category</label>
+              <div class="value" id="category"></div>
+            </div>
+            <div class="field">
+              <label>Incident Date</label>
+              <div class="value" id="incidentDate"></div>
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <div class="value" id="location"></div>
+            </div>
+            <div class="field">
+              <label>Submitted On</label>
+              <div class="value" id="submittedDate"></div>
+            </div>
+          </div>
+          <div class="field" style="margin-top: 1rem;">
+            <label>Title</label>
+            <div class="value" id="title"></div>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <div class="description-box" id="description"></div>
+          </div>
+        </div>
+
+        <!-- Reporter Information -->
+        <div class="section">
+          <h2>👤 Reporter Information</h2>
+          <div class="info-grid">
+            <div class="field">
+              <label>Anonymous Report</label>
+              <div class="value" id="isAnonymous"></div>
+            </div>
+          </div>
+          <p style="color: #6b7280; margin-top: 1rem; font-size: 0.9rem;">
+            ℹ️ Contact information (if provided) may be available for follow-up investigations.
+          </p>
+        </div>
+
+        <!-- Evidence Files -->
+        <div class="section" id="evidenceSection" style="display: none;">
+          <h2>📎 Evidence Files</h2>
+          <div class="evidence-files" id="evidenceFiles"></div>
+        </div>
+
+        <!-- Status Update Section -->
+        <div class="section">
+          <h2>🔄 Update Status</h2>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="updateStatus('under_review')">
+              Mark as Under Review
+            </button>
+            <button class="btn btn-success" onclick="updateStatus('resolved')">
+              Mark as Resolved
+            </button>
+            <button class="btn btn-danger" onclick="updateStatus('closed')">
+              Close Report
+            </button>
+          </div>
+
+          <div class="notes-section">
+            <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Add Notes (Optional)</label>
+            <textarea id="statusNotes" placeholder="Add any notes or comments about this status update..."></textarea>
+            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="updateStatusWithNotes()">
+              Update with Notes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentCaseId = null;
+
+    // Get caseId from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    currentCaseId = urlParams.get('caseId');
+
+    if (!currentCaseId) {
+      document.getElementById('loading').style.display = 'none';
+      showError('No case ID provided in URL');
+    } else {
+      loadReport(currentCaseId);
+    }
+
+    async function loadReport(caseId) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/reports/authority/${caseId}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to load report');
+        }
+
+        displayReport(data.report);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('reportContent').style.display = 'block';
+      } catch (error) {
+        console.error('Error loading report:', error);
+        document.getElementById('loading').style.display = 'none';
+        showError(`Failed to load report: ${error.message}`);
+      }
+    }
+
+    function displayReport(report) {
+      document.getElementById('caseId').textContent = report.caseId;
+      document.getElementById('category').textContent = report.category;
+      document.getElementById('title').textContent = report.title;
+      document.getElementById('description').textContent = report.description;
+      document.getElementById('incidentDate').textContent = new Date(report.incidentDate).toLocaleDateString();
+      document.getElementById('location').textContent = report.location;
+      document.getElementById('submittedDate').textContent = new Date(report.createdAt).toLocaleString();
+      document.getElementById('isAnonymous').textContent = report.isAnonymous ? 'Yes' : 'No';
+
+      // Status badge
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.className = `status-badge ${report.status}`;
+      statusBadge.textContent = report.status.replace('_', ' ').toUpperCase();
+
+      // Evidence files
+      if (report.evidenceFiles && report.evidenceFiles.length > 0) {
+        document.getElementById('evidenceSection').style.display = 'block';
+        const filesContainer = document.getElementById('evidenceFiles');
+        filesContainer.innerHTML = '';
+        
+        report.evidenceFiles.forEach(file => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className = 'file-item';
+          fileDiv.innerHTML = `
+            <span>📄</span>
+            <div style="flex: 1;">
+              <a href="/${file.path}" target="_blank">${file.filename}</a>
+              <div style="font-size: 0.85rem; color: #6b7280;">
+                ${(file.size / 1024).toFixed(2)} KB
+              </div>
+            </div>
+          `;
+          filesContainer.appendChild(fileDiv);
+        });
+      }
+    }
+
+    async function updateStatus(newStatus) {
+      if (!confirm(`Are you sure you want to update the status to "${newStatus.replace('_', ' ')}"?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/reports/${currentCaseId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update status');
+        }
+
+        showSuccess(`Status updated to "${newStatus.replace('_', ' ')}"`);
+        
+        // Update the status badge
+        const statusBadge = document.getElementById('statusBadge');
+        statusBadge.className = `status-badge ${newStatus}`;
+        statusBadge.textContent = newStatus.replace('_', ' ').toUpperCase();
+      } catch (error) {
+        console.error('Error updating status:', error);
+        showError(`Failed to update status: ${error.message}`);
+      }
+    }
+
+    async function updateStatusWithNotes() {
+      const notes = document.getElementById('statusNotes').value.trim();
+      
+      if (!notes) {
+        alert('Please enter notes before updating');
+        return;
+      }
+
+      const newStatus = prompt('Enter new status (under_review, resolved, or closed):');
+      
+      if (!newStatus || !['under_review', 'resolved', 'closed'].includes(newStatus)) {
+        alert('Invalid status');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/reports/${currentCaseId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: newStatus, notes }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update status');
+        }
+
+        showSuccess(`Status updated to "${newStatus.replace('_', ' ')}" with notes`);
+        document.getElementById('statusNotes').value = '';
+        
+        // Update the status badge
+        const statusBadge = document.getElementById('statusBadge');
+        statusBadge.className = `status-badge ${newStatus}`;
+        statusBadge.textContent = newStatus.replace('_', ' ').toUpperCase();
+      } catch (error) {
+        console.error('Error updating status:', error);
+        showError(`Failed to update status: ${error.message}`);
+      }
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error');
+      errorDiv.className = 'error';
+      errorDiv.textContent = '❌ ' + message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('success');
+      successDiv.className = 'success';
+      successDiv.textContent = '✅ ' + message;
+      successDiv.style.display = 'block';
+      setTimeout(() => {
+        successDiv.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

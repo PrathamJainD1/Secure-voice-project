@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeReport | Sign In / Sign Up</title>
+  <style>
+    :root {
+      --primary: rgba(147, 51, 234, 0.95);
+      --border: #ccc;
+      --text-muted: #555;
+      --bg-light: #e5e5e5; /* Dark white background */
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: var(--bg-light);
+      color: #333;
+    }
+
+    nav {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+      margin: 3rem auto;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      font-size: 1.7rem;
+    }
+
+    p {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tabs button {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 0.6rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .tabs button.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fafafa;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.1);
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: rgba(125, 40, 215, 0.95);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* ✅ Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        font-size: 1.3rem;
+        padding: 0.8rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: 92%;
+        margin: 2rem auto;
+        padding: 1rem;
+      }
+
+      .card {
+        padding: 1.2rem;
+        border-radius: 12px;
+      }
+
+      .tabs button {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+      }
+
+      input {
+        font-size: 0.95rem;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+        padding: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>SafeReport</nav>
+
+  <div class="container">
+    <div class="card">
+      <h1>Welcome to SafeReport</h1>
+      <p>Sign in or create your account</p>
+
+      <div class="tabs">
+        <button id="signinTab" class="active" onclick="showTab('signin')">Sign In</button>
+        <button id="signupTab" onclick="showTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- ✅ Sign In Form -->
+      <form id="signinForm">
+        <div class="form-group">
+          <label for="signin-email">Email</label>
+          <input type="email" id="signin-email" placeholder="you@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+          <input type="password" id="signin-password" placeholder="********" required />
+        </div>
+
+        <button type="submit" class="btn">Sign In</button>
+      </form>
+
+      <!-- ✅ Sign Up Form -->
+      <form id="signupForm" class="hidden">
+        <div class="form-group">
+          <label for="signup-fullname">Full Name</label>
+          <input type="text" id="signup-fullname" placeholder="Jane Doe" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="********" required />
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  const API_BASE = "http://localhost:5000/api/auth"; // backend base
+
+  function showTab(tab) {
+    const signinForm = document.getElementById("signinForm");
+    const signupForm = document.getElementById("signupForm");
+    const signinTab = document.getElementById("signinTab");
+    const signupTab = document.getElementById("signupTab");
+
+    if (tab === "signin") {
+      signinForm.classList.remove("hidden");
+      signupForm.classList.add("hidden");
+      signinTab.classList.add("active");
+      signupTab.classList.remove("active");
+    } else {
+      signupForm.classList.remove("hidden");
+      signinForm.classList.add("hidden");
+      signupTab.classList.add("active");
+      signinTab.classList.remove("active");
+    }
+  }
+
+  // ✅ Sign Up
+  document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fullName = document.getElementById("signup-fullname").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    if (!fullName || !email || !password) {
+      alert("❌ Please fill all fields.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Signup successful! Please sign in.");
+        showTab("signin");
+        document.getElementById("signupForm").reset();
+      } else {
+        alert(`❌ ${data.message || "Signup failed."}`);
+      }
+    } catch (err) {
+      alert("⚠️ Error connecting to the server.");
+      console.error(err);
+    }
+  });
+
+  // ✅ Sign In
+  document.getElementById("signinForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("signin-email").value.trim();
+    const password = document.getElementById("signin-password").value;
+
+    if (!email || !password) {
+      alert("❌ Please enter both email and password.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.user) {
+        const user = data.user;
+        
+        localStorage.setItem("user", JSON.stringify(user));
+
+        if (user.role === "#") {
+          window.location.href = "#l";
+        } else {
+          window.location.href = "user.html";
+        }
+      } else {
+        alert(`❌ ${data.message || "Invalid login credentials."}`);
+      }
+    } catch (err) {
+      alert("⚠️ Error connecting to the server.");
+      console.error(err);
+    }
+  });
+</script>
+
+</body>
+</html>

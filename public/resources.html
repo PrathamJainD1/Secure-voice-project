@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources - SafeReport</title>
+  <meta name="description" content="Helpful resources and support information">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary: rgba(147, 51, 234, 0.95);
+      --primary-hover: rgba(128, 40, 215, 1);
+      --background: #ffffff;
+      --text: #111827;
+      --muted-foreground: #6b7280;
+      --card-bg: #ffffff;
+      --border: #e5e7eb;
+      --shadow: rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    /* Navigation */
+    .nav {
+      background: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    .btn-outline {
+      border: 2px solid #fff;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    /* Hero Heading */
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 2rem;
+    }
+
+    /* Container & Grid */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Card Styling */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 6px 16px var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(147, 51, 234, 0.25);
+    }
+
+    .card h2 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted-foreground);
+      line-height: 1.6;
+    }
+
+    .card a {
+      color: var(--primary);
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+
+    .card a:hover {
+      color: var(--primary-hover);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--primary);
+      color: #fff;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="landing.html" class="nav-brand">SafeReport</a>
+      <ul class="nav-links">
+        <li><a href="landing.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="auth.html" class="btn btn-outline">Sign In</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Resources & Support</h1>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Emergency Contacts</h2>
+        <ul>
+          <li><strong>24/7 Crisis Hotline:</strong> 1-800-SAFE-NOW</li>
+          <li><strong>Email Support:</strong> support@safereport.com</li>
+          <li><strong>Emergency Services:</strong> 911</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Understanding Your Rights</h2>
+        <p>
+          You have the right to report incidents without fear of retaliation. Our platform ensures your identity remains protected throughout the process.
+        </p>
+        <ul style="list-style: disc; margin-left: 1.5rem;">
+          <li>Right to anonymity</li>
+          <li>Right to confidentiality</li>
+          <li>Right to follow up on your report</li>
+          <li>Right to support and resources</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>FAQs</h2>
+        <div>
+          <h3>How anonymous is my report?</h3>
+          <p>Your report is completely anonymous if you choose that option. We do not collect any identifying information.</p>
+        </div>
+        <div>
+          <h3>How long does the review process take?</h3>
+          <p>Most reports are reviewed within 48-72 hours. Complex cases may take longer.</p>
+        </div>
+        <div>
+          <h3>Can I update my report after submission?</h3>
+          <p>Yes, you can add updates or additional information through your dashboard.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>External Resources</h2>
+        <ul>
+          <li><a href="#">National Sexual Assault Hotline</a></li>
+          <li><a href="#">Workplace Harassment Prevention</a></li>
+          <li><a href="#">Mental Health Support</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 SafeReport. All rights reserved.</p>
+  </footer>
+</body>
+</html>
