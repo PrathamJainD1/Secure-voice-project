@@ -181,7 +181,7 @@ git push heroku main
 ## File Structure
 
 ```
-backend/
+server/
 ├── models/
 │   ├── User.js          # User schema
 │   └── Report.js        # Report schema
